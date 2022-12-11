@@ -1,0 +1,26 @@
+---
+- hosts: webservers
+  become: yes
+  tasks:
+  - name: install httpd
+    ansible.builtin.yum:
+      name: httpd
+      state: present
+
+  - name: remove port 80 listen line
+    ansible.builtin.lineinfile:
+      path: /etc/httpd/conf/httpd.conf
+      line: Listen 80
+      state: absent
+
+  - name: add port 8080 listen line
+    ansible.builtin.lineinfile:
+      path: /etc/httpd/conf/httpd.conf
+      line: Listen 8080
+      state: present
+
+  - name: enable and restart service
+    ansible.builtin.systemd:
+      name: httpd
+      state: started
+      enabled: true
