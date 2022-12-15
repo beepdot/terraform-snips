@@ -1,0 +1,26 @@
+---
+- hosts: webservers
+  become: yes
+  tasks:
+  - name: install nginx
+    apt:
+      name: nginx
+      state: present
+
+  - name: replace port 80 to 8080
+    replace:
+      path: /etc/nginx/sites-available/default
+      regexp: "listen 80 default_server;"
+      replace: "listen 8080 default_server;"
+
+  - name: replace port 80 to 8080
+    replace:
+      path: /etc/nginx/sites-available/default
+      regexp: "listen \\[::\\]:80 default_server;"
+      replace: "listen [::]:8080 default_server;"
+
+  - name: enable and restart service
+    service:
+      name: nginx
+      state: restarted
+      enabled: true

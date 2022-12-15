@@ -2,7 +2,7 @@
 
 terraform apply -auto-approve
 terraform show -json | jq . > /tmp/out.json
-jq -r '.values.root_module.resources[].values | select(.algorithm=="RSA") | .private_key_pem_pkcs8' /tmp/out.json | awk 'NF'
+jq -r '.values.root_module.resources[].values | select(.algorithm=="RSA") | .private_key_pem_pkcs8' /tmp/out.json | awk 'NF' > /tmp/privkey.pem
 chmod 400 /tmp/privkey.pem
 jq -r '.values.root_module.resources[].values | select(.public_ips) | .public_ips | @csv' /tmp/out.json | awk 'NF' | tr -d "\""
 
